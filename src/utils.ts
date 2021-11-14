@@ -3,16 +3,10 @@ import { Component as ICalComponent, Event as ICalEvent, Timezone as ICalTimezon
 
 const BASE32HEX_REGEXP = /([a-v]|[0-9])/gi
 const DATE_REGEXP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/i
-const GOOGLE_SYNC_TIMEOUT = 2_000
 
 /**
  * General utilities
  */
-
-/**
- * Convert a string to an array.
- */
-export const toArray = (input: string, symbol = ','): string[] => input ? input.split(symbol) : []
 
 /**
  * Converts a string to base32hex format.
@@ -50,35 +44,15 @@ export const isSameEventDateTime = (a: calendar_v3.Schema$EventDateTime, b: cale
 /**
  * Check if a calendar event from an iCal or Google is equal to another.
  */
-export const isSameEvent = (a: calendar_v3.Schema$Event, b: calendar_v3.Schema$Event): boolean => (
-  isEqualOrNullish(a.summary, b.summary) &&
-  isEqualOrNullish(a.location, b.location) &&
-  isEqualOrNullish(a.description, b.description) &&
-  isSameEventDateTime(a.start, b.start) &&
-  isSameEventDateTime(a.end, b.end)
-)
+export const isSameEvent = (a: calendar_v3.Schema$Event, b: calendar_v3.Schema$Event): boolean => {
+  const { start: startA, end: endA, ...restA } = a
+  const { start: startB, end: endB, ...restB } = b
 
-/**
- * Check if a calendar subscription is valid.
- */
-export const isValidSubscription = async (
-  calendar: calendar_v3.Calendar,
-  subscription: calendar_v3.Schema$Subscription,
-): Promise<boolean> => {
-  const params: calendar_v3.Params$Resource$Subscriptions$Insert = { requestBody: subscription }
-  const testSummary = (Math.random() + 1).toString(36)
-
-  const newSubscription = await calendar.subscriptions.insert(params)
-  newSubscription.fn = (events): calendar_v3.Schema$Event[] => events.map(event => ({ ...event, summary: testSummary }))
-  await calendar.subscriptions.sync({ requestBody: newSubscription })
-
-  // Wait for Google to sync the subscription.
-  await new Promise(resolve => setTimeout(resolve, GOOGLE_SYNC_TIMEOUT))
-  
-  const { data: { items } } = await calendar.events.list({ calendarId: newSubscription.calendarId })
-  await calendar.calendars.delete({ calendarId: newSubscription.calendarId })
-
-  return items.every(item => item.summary === testSummary)
+  return (
+    isSameEventDateTime(startA, startB) &&
+    isSameEventDateTime(endA, endB) &&
+    Object.keys(restA).every(key => isEqualOrNullish(restA[key], restB[key]))
+  )
 }
 
 /**

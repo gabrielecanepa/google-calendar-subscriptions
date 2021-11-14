@@ -51,7 +51,7 @@ const syncSubscription = async (
       // Update if not equal.
       await calendar.events.update({ calendarId, eventId: event.id, requestBody: event }, ...opts as any)
     } catch (e) {
-      console.error(`Failed to sync event ${event.summary}. The following error occured.\n`, e)
+      console.warn(`⚠️ Failed to sync event ${event.summary}. ${e.message}`)
       continue
     }
   }
