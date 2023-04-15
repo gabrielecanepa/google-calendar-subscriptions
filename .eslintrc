@@ -1,0 +1,35 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "ignorePatterns": ["node_modules", "dist"],
+  "plugins": ["@typescript-eslint"],
+  "extends": ["plugin:@typescript-eslint/eslint-recommended", "plugin:@typescript-eslint/recommended"],
+  "rules": {
+    "arrow-body-style": ["warn", "as-needed"],
+    "arrow-parens": ["error", "as-needed"],
+    "comma-dangle": ["error", "always-multiline"],
+    "func-style": ["error", "expression", { "allowArrowFunctions": true }],
+    "max-len": ["error", 140, { "ignorePattern": "^\\s*import\\s.+from\\s*.+" }],
+    "max-lines": "error",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-var": "error",
+    "object-curly-spacing": ["error", "always"],
+    "object-shorthand": ["error", "always"],
+    "prefer-arrow-callback": "error",
+    "prefer-const": ["error", { "destructuring": "any", "ignoreReadBeforeAssign": false }],
+    "quotes": ["error", "single", "avoid-escape"],
+    "semi": ["error", "never"],
+    "sort-keys": "off",
+    "sort-vars": ["warn", { "ignoreCase": false }],
+    "@typescript-eslint/explicit-function-return-type": "error",
+    "@typescript-eslint/no-unused-vars": "error"
+  }
+}
