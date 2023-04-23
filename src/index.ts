@@ -5,7 +5,7 @@ import fetch from 'node-fetch'
 import { auth as googleAuth, calendar as googleCalendar } from '@googleapis/calendar'
 import { Component as ICalComponent, Event as ICalEvent, Timezone as ICalTimezone, parse as parseIcs } from 'ical.js'
 
-import calendars from './calendars'
+import calendars, { Calendar } from './calendars'
 import type { CalendarDateTime, CalendarEvent } from './calendars'
 
 // Constants
@@ -75,7 +75,10 @@ const isEqual = (a: CalendarEvent, b: CalendarEvent): boolean => (
   a.end.date === b.end.date
 )
 
-calendars.forEach(async calendar => {
+/**
+ * Sync a calendar.
+ */
+export const syncCalendar = async (calendar: Calendar): Promise<void> => {
   const { calendarId, subscriptionUrl, fn = (events: CalendarEvent[]): CalendarEvent[] => events } = calendar
 
   try {
@@ -101,5 +104,10 @@ calendars.forEach(async calendar => {
     }
   } catch (e) {
     console.error(e)
+    process.exit(1)
   }
-})
+}
+
+for (const calendar of calendars) {
+  syncCalendar(calendar)
+}
