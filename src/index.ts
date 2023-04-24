@@ -1,19 +1,15 @@
 import { config as configEnv } from 'dotenv'
 configEnv()
 
-import fetch from 'node-fetch'
-import { auth as googleAuth, calendar as googleCalendar } from '@googleapis/calendar'
-import { Component as ICalComponent, Event as ICalEvent, Timezone as ICalTimezone, parse as parseIcs } from 'ical.js'
-
-import calendars, { Calendar, CalendarDateTime, CalendarEvent } from './calendars'
+import { auth as googleAuth, calendar as googleCalendar, calendar_v3 } from '@googleapis/calendar'
+import { Component as ICalComponent, Event as ICalEvent, Timezone as ICalTimezone, parse } from 'ical.js'
+import calendars, { CalendarDateTime, CalendarEvent, CalendarSubscription } from './calendars'
 import { isDate, toBase32Hex } from './utils'
 
-const SUBSCRIPTIONS = process.env.SUBSCRIPTIONS?.split(',') || []
-
-// Google
 const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL
 const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY
 const GOOGLE_SCOPES = ['https://www.googleapis.com/auth/calendar']
+const SUBSCRIPTIONS = process.env.SUBSCRIPTIONS?.split(',') || []
 
 if (!GOOGLE_CLIENT_EMAIL || !GOOGLE_PRIVATE_KEY) {
   throw new Error('Wrong environment variables. Rename the .env.example file to .env and update the values.')
@@ -34,10 +30,9 @@ const client = googleCalendar({ version: 'v3', auth })
  *
  * @url https://developers.google.com/calendar/api/v3/reference/events#resource
  */
-// eslint-disable-next-line arrow-body-style
+// eslint-disable-next-line
 const getDatesFromICalComponent = (component: ICalComponent, timeZone: string): { start: CalendarDateTime, end: CalendarDateTime } => {
   return ['start', 'end'].reduce((acc, key) => {
-    // Needed to fix ical's wrong dates.
     const [, { tzid },, dateTime] = component.getFirstProperty(`dt${key}`).toJSON()
     if (isDate(dateTime)) return { ...acc, [key]: { date: dateTime } }
     return { ...acc, [key]: { dateTime, timeZone: tzid || timeZone } }
@@ -45,23 +40,25 @@ const getDatesFromICalComponent = (component: ICalComponent, timeZone: string): 
 }
 
 /**
- * Format an iCal component to a Google Calendar resource.
+ * Format an iCal component as a Google Calendar resource.
  *
  * @url https://developers.google.com/calendar/api/v3/reference/events#resource
  */
-const parseICalEvents = (iCal: ICalComponent): CalendarEvent[] => {
+const parseIcs = (ics: string): CalendarEvent[] => {
+  const iCal = new ICalComponent(parse(ics))
   const { tzid } = new ICalTimezone(iCal.getFirstSubcomponent('vtimezone'))
 
   return iCal.getAllSubcomponents('vevent').map(event => {
     const { uid, summary, location, description } = new ICalEvent(event)
-    return { id: toBase32Hex(uid), summary, location, description, ...getDatesFromICalComponent(event, tzid) }
+    const url = event.getFirstPropertyValue('url') || null
+    return { id: toBase32Hex(uid), summary, location, description, url, ...getDatesFromICalComponent(event, tzid) }
   })
 }
 
 /**
- * Check if a calendar event is equal to another.
+ * Check if a calendar event from an iCal or Google is equal to another.
  */
-const isEqual = (a: CalendarEvent, b: CalendarEvent): boolean => (
+const isEqual = (a: CalendarEvent | calendar_v3.Schema$Event, b: CalendarEvent | calendar_v3.Schema$Event): boolean => (
   a.summary === b.summary &&
   a.location === b.location &&
   a.description === b.description &&
@@ -72,15 +69,13 @@ const isEqual = (a: CalendarEvent, b: CalendarEvent): boolean => (
 /**
  * Sync a calendar.
  */
-export const syncSubscription = async (calendar: Calendar): Promise<void> => {
-  const { calendarId, subscriptionUrl, fn = (events: CalendarEvent[]): CalendarEvent[] => events } = calendar
+export const syncSubscription = async (subscription: CalendarSubscription): Promise<void> => {
+  const { calendarId, subscriptionUrl, fn = (events: CalendarEvent[]): CalendarEvent[] => events } = subscription
 
   try {
-    const googleEvents: CalendarEvent[] = await (await client.events.list({ calendarId })).data.items || []
-
+    const googleEvents = await (await client.events.list({ calendarId })).data.items || []
     const ics = await (await fetch(subscriptionUrl)).text()
-    const iCal = new ICalComponent(parseIcs(ics))
-    const events = parseICalEvents(iCal)
+    const events = parseIcs(ics)
 
     for (const event of fn(events)) {
       // Find the original event in the calendar.
@@ -102,21 +97,19 @@ export const syncSubscription = async (calendar: Calendar): Promise<void> => {
 }
 
 /**
- * Sync multiple calendars.
+ * Sync multiple subscriptions.
  */
-export const syncSubscriptions = async (calendars: Calendar[]): Promise<void> => {
-  // Sync all calendars specified in env.
-  for (const calendar of calendars) {
-    await syncSubscription(calendar)
+export const syncSubscriptions = async (subscriptions: CalendarSubscription[]): Promise<void> => {
+  for (const subscription of subscriptions) {
+    await syncSubscription(subscription)
   }
 }
 
 // Export all utils.
 export {
-  Calendar,
   CalendarDateTime,
   CalendarEvent,
-  isDate,
+  CalendarSubscription,
   toBase32Hex,
 }
 
