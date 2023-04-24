@@ -96,7 +96,7 @@ export const syncCalendar = async (calendar: Calendar): Promise<void> => {
       // Skip if equal.
       if (isEqual(googleEvent, event)) continue
       // Update if not equal.
-      await client.events.update({ calendarId, eventId: googleEvent.id as string, requestBody: { ...googleEvent, ...event } })
+      await client.events.update({ calendarId, eventId: event.id, requestBody: { ...googleEvent, ...event } })
     }
   } catch (e) {
     console.error(e)
