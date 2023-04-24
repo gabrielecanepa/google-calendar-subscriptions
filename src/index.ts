@@ -5,11 +5,8 @@ import fetch from 'node-fetch'
 import { auth as googleAuth, calendar as googleCalendar } from '@googleapis/calendar'
 import { Component as ICalComponent, Event as ICalEvent, Timezone as ICalTimezone, parse as parseIcs } from 'ical.js'
 
-import calendars, { Calendar } from './calendars'
-import type { CalendarDateTime, CalendarEvent } from './calendars'
-
-// Constants
-const BASE32HEX_REGEXP = /([a-v]|[0-9])/gi
+import calendars, { activeCalendars, Calendar, CalendarDateTime, CalendarEvent } from './calendars'
+import { isDate, toBase32Hex } from './utils'
 
 // Google
 const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL
@@ -38,11 +35,11 @@ const client = googleCalendar({ version: 'v3', auth })
 // eslint-disable-next-line arrow-body-style
 const getDatesFromICalComponent = (component: ICalComponent, timeZone: string): { start: CalendarDateTime, end: CalendarDateTime } => {
   return ['start', 'end'].reduce((acc, key) => {
-    const [ , { tzid }, , dateTime ] = component.getFirstProperty(`dt${key}`).toJSON()
-    const isDate = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/i.test(dateTime)
-    if (isDate) return { ...acc, [key]: { date: dateTime } }
+    // Needed to fix ical's wrong dates.
+    const [, { tzid },, dateTime] = component.getFirstProperty(`dt${key}`).toJSON()
+    if (isDate(dateTime)) return { ...acc, [key]: { date: dateTime } }
     return { ...acc, [key]: { dateTime, timeZone: tzid || timeZone } }
-  }, { start: null, end: null })
+  }, { start: { date: null }, end: { date: null } })
 }
 
 /**
@@ -55,8 +52,7 @@ const parseICalEvents = (iCal: ICalComponent): CalendarEvent[] => {
 
   return iCal.getAllSubcomponents('vevent').map(event => {
     const { uid, summary, location, description } = new ICalEvent(event)
-    const id = uid.match(BASE32HEX_REGEXP).join('').toLowerCase()
-    return { id, summary, location, description, ...getDatesFromICalComponent(event, tzid) }
+    return { id: toBase32Hex(uid), summary, location, description, ...getDatesFromICalComponent(event, tzid) }
   })
 }
 
@@ -67,12 +63,12 @@ const isEqual = (a: CalendarEvent, b: CalendarEvent): boolean => (
   a.summary === b.summary &&
   a.location === b.location &&
   a.description === b.description &&
-  +new Date(a.start.dateTime) === +new Date(b.start.dateTime) &&
-  a.start.timeZone === b.start.timeZone
-  && a.start.date === b.start.date &&
-  +new Date(a.end.dateTime) === +new Date(b.end.dateTime) &&
-  a.end.timeZone === b.end.timeZone &&
-  a.end.date === b.end.date
+  +new Date(a.start?.dateTime || '') === +new Date(b.start?.dateTime || '') &&
+  a.start?.timeZone === b.start?.timeZone
+  && a.start?.date === b.start?.date &&
+  +new Date(a.end?.dateTime || '') === +new Date(b.end?.dateTime || '') &&
+  a.end?.timeZone === b.end?.timeZone &&
+  a.end?.date === b.end?.date
 )
 
 /**
@@ -82,7 +78,7 @@ export const syncCalendar = async (calendar: Calendar): Promise<void> => {
   const { calendarId, subscriptionUrl, fn = (events: CalendarEvent[]): CalendarEvent[] => events } = calendar
 
   try {
-    const googleEvents: CalendarEvent[] = await (await client.events.list({ calendarId })).data.items
+    const googleEvents: CalendarEvent[] = await (await client.events.list({ calendarId })).data.items || []
 
     const ics = await (await fetch(subscriptionUrl)).text()
     const iCal = new ICalComponent(parseIcs(ics))
@@ -90,7 +86,7 @@ export const syncCalendar = async (calendar: Calendar): Promise<void> => {
 
     for (const event of fn(events)) {
       // Find the original event in the calendar.
-      const googleEvent = googleEvents.find(googleEvent => googleEvent.id === event.id)
+      const googleEvent = googleEvents.find(googleEvent => googleEvent.id === event.id) || {}
 
       // Create event if not existing.
       if (!googleEvent) {
@@ -100,14 +96,14 @@ export const syncCalendar = async (calendar: Calendar): Promise<void> => {
       // Skip if equal.
       if (isEqual(googleEvent, event)) continue
       // Update if not equal.
-      await client.events.update({ calendarId, eventId: googleEvent.id, requestBody: { ...googleEvent, ...event } })
+      await client.events.update({ calendarId, eventId: googleEvent.id as string, requestBody: { ...googleEvent, ...event } })
     }
   } catch (e) {
     console.error(e)
-    process.exit(1)
   }
 }
 
-for (const calendar of calendars) {
+// Sync all calendars specified in env.
+for (const calendar of calendars.filter(calendar => activeCalendars.includes(calendar.name))) {
   syncCalendar(calendar)
 }
