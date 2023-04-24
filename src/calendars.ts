@@ -36,7 +36,7 @@ const calendars: Calendar[] = [
   },
   {
     name: 'bulls',
-    calendarId: '8104efd5db33dcfd2e03fc356612e6fc709678344243063cba7f4834cbc21d2e@group.calendar.google.com',
+    calendarId: '3f2731b24b12b68211adfefb3ada0f5fc4d4843225652d704a067e8d50200443@group.calendar.google.com',
     subscriptionUrl: 'https://stanza.co/api/schedules/nba-bulls/nba-bulls.ics',
     fn: events => events.map(event => {
       // Prevent event id from changing (stanza.co behavior).
