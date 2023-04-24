@@ -5,8 +5,10 @@ import fetch from 'node-fetch'
 import { auth as googleAuth, calendar as googleCalendar } from '@googleapis/calendar'
 import { Component as ICalComponent, Event as ICalEvent, Timezone as ICalTimezone, parse as parseIcs } from 'ical.js'
 
-import calendars, { activeCalendars, Calendar, CalendarDateTime, CalendarEvent } from './calendars'
+import calendars, { Calendar, CalendarDateTime, CalendarEvent } from './calendars'
 import { isDate, toBase32Hex } from './utils'
+
+const CALENDAR_SUBSCRIPTIONS = process.env.CALENDAR_SUBSCRIPTIONS?.split(',') || []
 
 // Google
 const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL
@@ -74,7 +76,7 @@ const isEqual = (a: CalendarEvent, b: CalendarEvent): boolean => (
 /**
  * Sync a calendar.
  */
-export const syncCalendar = async (calendar: Calendar): Promise<void> => {
+export const syncSubscription = async (calendar: Calendar): Promise<void> => {
   const { calendarId, subscriptionUrl, fn = (events: CalendarEvent[]): CalendarEvent[] => events } = calendar
 
   try {
@@ -86,7 +88,7 @@ export const syncCalendar = async (calendar: Calendar): Promise<void> => {
 
     for (const event of fn(events)) {
       // Find the original event in the calendar.
-      const googleEvent = googleEvents.find(googleEvent => googleEvent.id === event.id) || {}
+      const googleEvent = googleEvents.find(googleEvent => googleEvent.id === event.id)
 
       // Create event if not existing.
       if (!googleEvent) {
@@ -103,7 +105,16 @@ export const syncCalendar = async (calendar: Calendar): Promise<void> => {
   }
 }
 
-// Sync all calendars specified in env.
-for (const calendar of calendars.filter(calendar => activeCalendars.includes(calendar.name))) {
-  syncCalendar(calendar)
+/**
+ * Sync multiple calendars.
+ */
+export const syncSubscriptions = async (calendars: Calendar[]): Promise<void> => {
+  // Sync all calendars specified in env.
+  for (const calendar of calendars) {
+    await syncSubscription(calendar)
+  }
 }
+
+// Sync all calendars specified in env.
+const activeCalendars = calendars.filter(calendar => CALENDAR_SUBSCRIPTIONS.includes(calendar.name))
+syncSubscriptions(activeCalendars)
