@@ -115,6 +115,15 @@ export const syncSubscriptions = async (calendars: Calendar[]): Promise<void> =>
   }
 }
 
+// Export all utils.
+export {
+  Calendar,
+  CalendarDateTime,
+  CalendarEvent,
+  isDate,
+  toBase32Hex,
+}
+
 // Sync all calendars specified in env.
 const activeCalendars = calendars.filter(calendar => CALENDAR_SUBSCRIPTIONS.includes(calendar.name))
 syncSubscriptions(activeCalendars)
