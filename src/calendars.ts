@@ -11,8 +11,6 @@ export type Calendar = GoogleCalendar.Schema$Calendar & {
   fn?: (events: CalendarEvent[]) => CalendarEvent[]
 }
 
-export const activeCalendars: string[] = process.env.CALENDARS?.split(',') || []
-
 const calendars: Calendar[] = [
   {
     name: 'holidays',
