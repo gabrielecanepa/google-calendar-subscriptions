@@ -8,7 +8,7 @@ import { Component as ICalComponent, Event as ICalEvent, Timezone as ICalTimezon
 import calendars, { Calendar, CalendarDateTime, CalendarEvent } from './calendars'
 import { isDate, toBase32Hex } from './utils'
 
-const CALENDAR_SUBSCRIPTIONS = process.env.CALENDAR_SUBSCRIPTIONS?.split(',') || []
+const SUBSCRIPTIONS = process.env.SUBSCRIPTIONS?.split(',') || []
 
 // Google
 const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL
@@ -121,5 +121,5 @@ export {
 }
 
 // Sync all calendars specified in env.
-const activeCalendars = calendars.filter(calendar => CALENDAR_SUBSCRIPTIONS.includes(calendar.name))
+const activeCalendars = calendars.filter(calendar => SUBSCRIPTIONS.includes(calendar.name))
 syncSubscriptions(activeCalendars)
