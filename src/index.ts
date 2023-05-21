@@ -65,12 +65,8 @@ const isEqual = (a: CalendarEvent, b: CalendarEvent): boolean => (
   a.summary === b.summary &&
   a.location === b.location &&
   a.description === b.description &&
-  +new Date(a.start?.dateTime || '') === +new Date(b.start?.dateTime || '') &&
-  a.start?.timeZone === b.start?.timeZone
-  && a.start?.date === b.start?.date &&
-  +new Date(a.end?.dateTime || '') === +new Date(b.end?.dateTime || '') &&
-  a.end?.timeZone === b.end?.timeZone &&
-  a.end?.date === b.end?.date
+  JSON.stringify(a.start) === JSON.stringify(b.start) &&
+  JSON.stringify(a.end) === JSON.stringify(b.end)
 )
 
 /**
