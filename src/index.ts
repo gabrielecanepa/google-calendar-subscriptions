@@ -59,14 +59,23 @@ const parseICalEvents = (iCal: ICalComponent): CalendarEvent[] => {
 }
 
 /**
+ * Check if a calendar date is equal to another.
+ */
+const isDateEqual = (a: CalendarDateTime, b: CalendarDateTime): boolean => {
+  if (a.date && b.date) return a.date === b.date
+  if (a.dateTime && b.dateTime) return a.dateTime === b.dateTime && a.timeZone === b.timeZone
+  return false
+}
+
+/**
  * Check if a calendar event is equal to another.
  */
 const isEqual = (a: CalendarEvent, b: CalendarEvent): boolean => (
   a.summary === b.summary &&
   a.location === b.location &&
   a.description === b.description &&
-  JSON.stringify(a.start) === JSON.stringify(b.start) &&
-  JSON.stringify(a.end) === JSON.stringify(b.end)
+  isDateEqual(a.start, b.start) &&
+  isDateEqual(a.end, b.end)
 )
 
 /**

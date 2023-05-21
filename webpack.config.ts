@@ -3,6 +3,7 @@ import { Configuration } from 'webpack'
 
 const config: Configuration = ({
   target: 'node',
+  mode: 'production',
   entry: {
     background: path.resolve(__dirname, 'src', 'index.ts'),
   },
