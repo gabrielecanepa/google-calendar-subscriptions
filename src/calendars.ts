@@ -35,14 +35,17 @@ const calendars: Calendar[] = [
     }),
   },
   {
-    name: 'bulls',
+    name: 'nba',
     calendarId: '3f2731b24b12b68211adfefb3ada0f5fc4d4843225652d704a067e8d50200443@group.calendar.google.com',
     subscriptionUrl: 'https://stanza.co/api/schedules/nba-bulls/nba-bulls.ics',
-    fn: events => events.map(event => {
+    fn: events => events.map(e => {
       // Prevent event id from changing (stanza.co behavior).
-      const id = toBase32Hex(event.summary + event.start.dateTime.split('T')[0])
-      const summary = event.summary.replace('vs.', 'v')
-      return { ...event, id, summary, description: null }
+      const event = { ...e, id: toBase32Hex(e.summary + e.start.dateTime.split('T')[0]), description: null }
+      if (event.summary.match(/\svs\.\s/)) {
+        const [home, away] = event.summary.split(/\svs\.\s/)
+        return { ...event, summary: `${away} @ ${home}` }
+      }
+      return { ...event, summary: e.summary.replace('at', '@') }
     }),
   },
 ]
