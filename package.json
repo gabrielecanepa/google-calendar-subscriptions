@@ -16,7 +16,6 @@
     "@googleapis/calendar": "^6.0.0",
     "dotenv": "^16.0.3",
     "ical.js": "^1.5.0",
-    "node-fetch": "^3.3.1",
     "webpack": "^5.76.1",
     "webpack-cli": "^5.1.1"
   },
