@@ -1,4 +1,4 @@
-name: Keep actions alive
+name: Keep alive
 on:
   schedule:
     - cron: "0 0 * * *"
