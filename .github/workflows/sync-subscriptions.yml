@@ -3,7 +3,7 @@ name: Sync subscriptions
 on:
   push:
     branches:
-      - calendars
+      - subscriptions
   schedule:
     - cron: 0 * * * *
 

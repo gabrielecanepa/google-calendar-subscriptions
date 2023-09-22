@@ -4,14 +4,15 @@ import { Configuration } from 'webpack'
 const config: Configuration = ({
   target: 'node',
   entry: {
-    background: path.resolve(__dirname, 'src', 'index.ts'),
+    bundle: path.resolve(__dirname, 'src', 'index.ts'),
+    script: path.resolve(__dirname, 'src', 'scripts', 'index.ts'),
   },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
   },
   resolve: {
-    extensions: ['.ts', '.js', '.json'],
+    extensions: ['.js', '.json', '.ts'],
   },
   module: {
     rules: [

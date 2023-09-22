@@ -1,13 +1,9 @@
 import { calendar_v3 } from '@googleapis/calendar'
 import { Component as ICalComponent, Event as ICalEvent, Timezone as ICalTimezone, parse } from 'ical.js'
-import { CalendarDateTime, CalendarEvent } from './calendars'
-
-// Environment
+import { CalendarDateTime, CalendarEvent } from './calendar'
 
 export const BASE32HEX_REGEXP = /([a-v]|[0-9])/gi
 export const DATE_REGEXP = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/i
-
-// Utilities
 
 /**
  * Converts a string to base32hex format.
@@ -37,8 +33,6 @@ export const stringifyList = (list: any[], options: StringifyListOptions = DEFAU
   const connector = options.type === 'conjunction' ? 'and' : 'or'
   return list.join(', ').replace(/, ([^,]*)$/, `${comma} ${connector} $1`)
 }
-
-// Calendar
 
 /**
  * Extracts dates from an iCal component and format them according to the Google Calendar API.
@@ -73,7 +67,7 @@ export const parseIcs = (ics: string): CalendarEvent[] => {
 /**
  * Check if a calendar event from an iCal or Google is equal to another.
  */
-export const isEqual = (a: CalendarEvent | calendar_v3.Schema$Event, b: CalendarEvent | calendar_v3.Schema$Event): boolean => (
+export const isEqualEvent = (a: CalendarEvent | calendar_v3.Schema$Event, b: CalendarEvent | calendar_v3.Schema$Event): boolean => (
   a.summary === b.summary &&
   a.location === b.location &&
   a.description === b.description &&

@@ -1,6 +1,6 @@
 {
-  "name": "subscriptions-sync",
-  "version": "0.0.1",
+  "name": "google-calendar-subscriptions",
+  "version": "1.0.0",
   "description": "Sync and customize calendar subscriptions using the Google Calendar API and GitHub Actions.",
   "keywords": [
     "google-calendar",
@@ -10,7 +10,7 @@
     "calendar-sync",
     "calendar-subscriptions"
   ],
-  "author": "Gabriele Canepa <me@gabrielecanepa.com>",
+  "author": "Gabriele Canepa <contact@gabrielecanepa.com>",
   "license": "MIT",
   "dependencies": {
     "@googleapis/calendar": "^6.0.0",
@@ -31,7 +31,7 @@
     "typescript": "^4.9.5"
   },
   "scripts": {
-    "start": "yarn build && node dist/bundle.js",
+    "start": "yarn build --stats errors-only && node dist/script.js",
     "build": "webpack --mode=production",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix"

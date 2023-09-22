@@ -6,3 +6,6 @@ node_modules/
 *.bundle
 *.log
 .DS_Store
+
+# Tracked in the subscriptions branch.
+src/subscriptions.ts
