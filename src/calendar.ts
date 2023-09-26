@@ -70,17 +70,3 @@ export const syncSubscription = async (subscription: CalendarSubscription, optio
     }
   }
 }
-
-/**
- * Sync multiple subscriptions.
- */
-export const syncSubscriptions = async (subscriptions: CalendarSubscription[], options: { clear?: boolean } = {}): Promise<void> => {
-  for (const subscription of subscriptions) {
-    try {
-      await syncSubscription(subscription, options)
-    } catch (e) {
-      console.error(`Failed to sync calendar ${subscription.name}. The following error occured.\n`, e)
-      continue
-    }
-  }
-}

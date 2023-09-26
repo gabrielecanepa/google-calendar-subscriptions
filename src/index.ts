@@ -6,5 +6,4 @@ export {
   CalendarEvent,
   CalendarSubscription,
   syncSubscription,
-  syncSubscriptions,
 } from './calendar'
