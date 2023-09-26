@@ -67,7 +67,7 @@ export const parseIcs = (ics: string): CalendarEvent[] => {
 /**
  * Check if a calendar event from an iCal or Google is equal to another.
  */
-export const isEqualEvent = (a: CalendarEvent | calendar_v3.Schema$Event, b: CalendarEvent | calendar_v3.Schema$Event): boolean => (
+export const isSameEvent = (a: CalendarEvent | calendar_v3.Schema$Event, b: CalendarEvent | calendar_v3.Schema$Event): boolean => (
   a.summary === b.summary &&
   a.location === b.location &&
   a.description === b.description &&

@@ -1,6 +1,6 @@
 import { calendar_v3 } from '@googleapis/calendar'
 import client from './client'
-import { isEqualEvent, parseIcs } from './utils'
+import { isSameEvent, parseIcs } from './utils'
 
 export type CalendarDateTime = {
   date?: string
@@ -61,7 +61,7 @@ export const syncSubscription = async (subscription: CalendarSubscription, optio
         continue
       }
       // Skip if equal.
-      if (isEqualEvent(googleEvent, event)) continue
+      if (isSameEvent(googleEvent, event)) continue
       // Update if not equal.
       await client.events.update({ calendarId, eventId: event.id, requestBody: event })
     } catch (e) {
