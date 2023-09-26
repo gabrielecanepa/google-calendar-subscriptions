@@ -20,7 +20,7 @@
     "func-style": ["error", "expression", { "allowArrowFunctions": true }],
     "max-len": ["error", 140, { "ignorePattern": "^\\s*import\\s.+from\\s*.+" }],
     "max-lines": "error",
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-console": ["warn", { "allow": ["error", "info", "warn"] }],
     "no-var": "error",
     "object-curly-spacing": ["error", "always"],
     "object-shorthand": ["error", "always"],
