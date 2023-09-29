@@ -15,6 +15,25 @@ export const toBase32Hex = (string: string): string => string.match(BASE32HEX_RE
  */
 export const isDate = (string: string): boolean => DATE_REGEXP.test(string)
 
+/**
+ * Check if a value is null or undefined.
+ */
+export const isNullish = (value: any): boolean => value === null || value === undefined
+
+/**
+ * Check if two values are equal or both nullish.
+ */
+export const isEqualOrNullish = (a: any, b: any): boolean => a === b || isNullish(a) && isNullish(b)
+
+/**
+ * Check if two calendar datetimes are equal.
+ */
+export const isSameCalendarDateTime = (a: CalendarDateTime, b: CalendarDateTime): boolean => {
+  if (a.date && b.date) return a.date === b.date
+  if (a.dateTime && b.dateTime) return new Date(a.dateTime).toString() === new Date(b.dateTime).toString()
+  return false
+}
+
 export type StringifyListOptions = {
   style: 'short' | 'long',
   type: 'conjunction' | 'disjunction'
@@ -68,9 +87,9 @@ export const parseIcs = (ics: string): CalendarEvent[] => {
  * Check if a calendar event from an iCal or Google is equal to another.
  */
 export const isSameEvent = (a: CalendarEvent | calendar_v3.Schema$Event, b: CalendarEvent | calendar_v3.Schema$Event): boolean => (
-  a.summary === b.summary &&
-  a.location === b.location &&
-  a.description === b.description &&
-  JSON.stringify(a.start) === JSON.stringify(b.start) &&
-  JSON.stringify(a.end) === JSON.stringify(b.end)
+  isEqualOrNullish(a.summary, b.summary) &&
+  isEqualOrNullish(a.location, b.location) &&
+  isEqualOrNullish(a.description, b.description) &&
+  isSameCalendarDateTime(a.start, b.start) &&
+  isSameCalendarDateTime(a.end, b.end)
 )

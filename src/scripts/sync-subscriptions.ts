@@ -20,7 +20,7 @@ const activeSubscriptions = subscriptions.filter(subscription => SUBSCRIPTIONS.i
     try {
       console.info(`Syncing ${subscription.name} subscription...`)
       await syncSubscription(subscription, opts)
-      console.info(`${subscription.name} successfully synced.`)
+      console.info(`${subscription.name} subscription successfully synced.`)
     } catch (e) {
       console.error(`Failed to sync ${subscription.name}. The following error occured.\n`, e)
       continue
