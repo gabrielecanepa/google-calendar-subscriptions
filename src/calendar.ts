@@ -1,4 +1,3 @@
-import { calendar_v3 } from '@googleapis/calendar'
 import client from './client'
 import { isSameEvent, parseIcs } from './utils'
 
@@ -22,7 +21,7 @@ export type CalendarSubscription = {
   name: string
   calendarId: string
   subscriptionUrl: string
-  fn?: (events: CalendarEvent[]) => calendar_v3.Schema$Event[]
+  fn?: (events: CalendarEvent[]) => CalendarEvent[] | Promise<CalendarEvent[]>
 }
 
 /**
@@ -50,7 +49,9 @@ export const syncSubscription = async (subscription: CalendarSubscription, optio
     }
   }
 
-  for (const event of fn(events)) {
+  const fnEvents = fn.constructor.name === 'AsyncFunction' ? await fn(events) : fn(events) as CalendarEvent[]
+
+  for (const event of fnEvents) {
     try {
       // Find the original event in the calendar.
       const googleEvent = googleEvents.find(googleEvent => googleEvent.id === event.id)
