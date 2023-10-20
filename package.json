@@ -1,39 +1,48 @@
 {
   "name": "google-calendar-subscriptions",
-  "version": "1.0.0",
-  "description": "Sync and customize calendar subscriptions using the Google Calendar API and GitHub Actions.",
+  "version": "0.1.3",
+  "description": "Extend the Google Calendar client to allow customizing and syncing calendar subscriptions 📆",
+  "author": "Gabriele Canepa <contact@gabrielecanepa.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/gabrielecanepa/google-calendar-subscriptions",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gabrielecanepa/google-calendar-subscriptions.git"
+  },
   "keywords": [
+    "google",
     "google-calendar",
     "google-calendar-api",
     "google-calendar-synchronization",
-    "github-actions",
     "calendar-sync",
-    "calendar-subscriptions"
+    "calendar-subscription"
   ],
-  "author": "Gabriele Canepa <contact@gabrielecanepa.com>",
-  "license": "MIT",
+  "main": "./build/index.js",
+  "module": "./build/index.mjs",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "dependencies": {
     "@googleapis/calendar": "^6.0.0",
     "dotenv": "^16.0.3",
-    "ical.js": "^1.5.0",
-    "webpack": "^5.76.1",
-    "webpack-cli": "^5.1.1"
+    "ical.js": "^1.5.0"
   },
   "devDependencies": {
     "@types/gapi": "^0.0.44",
     "@types/node": "^18.15.11",
-    "@types/webpack": "^5.28.0",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "eslint": "^8.36.0",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
+    "tsup": "^7.2.0",
     "typescript": "^4.9.5"
   },
   "scripts": {
-    "start": "yarn build --stats errors-only && node dist/script.js",
-    "build": "webpack --mode=production",
+    "build": "tsup",
     "lint": "eslint src --ext .ts",
-    "lint:fix": "eslint src --ext .ts --fix"
+    "fix": "eslint src --ext .ts --fix",
+    "publish": "yarn build && npm publish"
   }
 }

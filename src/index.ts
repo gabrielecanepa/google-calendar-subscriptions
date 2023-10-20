@@ -1,9 +1,8 @@
-import { config } from 'dotenv'
-config()
+import 'dotenv/config'
+
+export { default as calendar } from './client'
 
 export {
-  CalendarDateTime,
-  CalendarEvent,
-  CalendarSubscription,
-  syncSubscription,
-} from './calendar'
+  GoogleCalendarSubscription,
+  GoogleCalendarSubscriptionAsync,
+} from './subscription'
