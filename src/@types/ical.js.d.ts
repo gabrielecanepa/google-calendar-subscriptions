@@ -1,36 +1,38 @@
+/// <reference types="node" />
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 declare module 'ical.js' {
-  function parse(input: string): any;
+  function parse(input: string): any
 
   export class helpers {
-    public static updateTimezones(vcal: Component): Component;
+    public static updateTimezones(vcal: Component): Component
   }
 
   class Component {
-    public static fromString(str: string): Component;
+    constructor(jCal: any[] | string, parent?: Component)
 
     public name: string
+    
+    public static fromString(str: string): Component
 
-    constructor(jCal: any[] | string, parent?: Component);
+    public toJSON(): any[]
 
-    public toJSON(): any[];
+    public getFirstSubcomponent(name?: string): Component | null
+    public getAllSubcomponents(name?: string): Component[]
 
-    public getFirstSubcomponent(name?: string): Component | null;
-    public getAllSubcomponents(name?: string): Component[];
+    public getFirstPropertyValue<T = any>(name?: string): T
 
-    public getFirstPropertyValue<T = any>(name?: string): T;
+    public getFirstProperty(name?: string): Property
+    public getAllProperties(name?: string): Property[]
 
-    public getFirstProperty(name?: string): Property;
-    public getAllProperties(name?: string): Property[];
+    public addProperty(property: Property): Property
+    public addPropertyWithValue(name: string, value: string | number | object): Property
 
-    public addProperty(property: Property): Property;
-    public addPropertyWithValue(name: string, value: string | number | object): Property;
+    public updatePropertyWithValue(name: string, value: string | number | object): Property
 
-    public updatePropertyWithValue(name: string, value: string | number | object): Property;
+    public removeAllProperties(name?: string): boolean
 
-    public removeAllProperties(name?: string): boolean;
-
-    public addSubcomponent(component: Component): Component;
+    public addSubcomponent(component: Component): Component
   }
 
   export class Event {
@@ -47,7 +49,7 @@ declare module 'ical.js' {
     public constructor(component?: Component | null, options?: {
       strictExceptions: boolean,
       exceptions: Array<Component | Event>
-    });
+    })
 
     public isRecurring(): boolean
     public iterator(startTime?: Time): RecurExpansion
@@ -57,33 +59,33 @@ declare module 'ical.js' {
     public name: string
     public type: string
 
-    constructor(jCal: any[] | string, parent?: Component);
+    constructor(jCal: any[] | string, parent?: Component)
 
-    public getFirstValue<T = any>(): T;
-    public getValues<T = any>(): T[];
+    public getFirstValue<T = any>(): T
+    public getValues<T = any>(): T[]
 
-    public setParameter(name: string, value: string | string[]): void;
-    public setValue(value: string | object): void;
-    public setValues(values: (string | object)[]): void;
-    public toJSON(): any;
+    public setParameter(name: string, value: string | string[]): void
+    public setValue(value: string | object): void
+    public setValues(values: (string | object)[]): void
+    public toJSON(): any
   }
 
   interface TimeJsonData {
-    year?: number;
-    month?: number;
-    day?: number;
-    hour?: number;
-    minute?: number;
-    second?: number;
-    isDate?: boolean;
+    year?: number
+    month?: number
+    day?: number
+    hour?: number
+    minute?: number
+    second?: number
+    isDate?: boolean
   }
 
   export class Time {
-    public static fromString(str: string): Time;
-    public static fromJSDate(aDate: Date | null, useUTC: boolean): Time;
-    public static fromData(aData: TimeJsonData): Time;
+    public static fromString(str: string): Time
+    public static fromJSDate(aDate: Date | null, useUTC: boolean): Time
+    public static fromData(aData: TimeJsonData): Time
 
-    public static now(): Time;
+    public static now(): Time
 
     public isDate: boolean
     public timezone: string
@@ -96,21 +98,21 @@ declare module 'ical.js' {
     public minute: number
     public second: number
 
-    constructor(data?: TimeJsonData);
-    public compare(aOther: Time): number;
+    constructor(data?: TimeJsonData)
+    public compare(aOther: Time): number
 
-    public clone(): Time;
-    public convertToZone(zone: Timezone): Time;
+    public clone(): Time
+    public convertToZone(zone: Timezone): Time
 
     public adjust(
-      aExtraDays: number, aExtraHours: number, aExtraMinutes: number, aExtraSeconds: number, aTimeopt?: Time): void;
+      aExtraDays: number, aExtraHours: number, aExtraMinutes: number, aExtraSeconds: number, aTimeopt?: Time): void
 
-    public addDuration(aDuration: Duration): void;
-    public subtractDateTz(aDate: Time): Duration;
+    public addDuration(aDuration: Duration): void
+    public subtractDateTz(aDate: Time): Duration
 
-    public toUnixTime(): number;
-    public toJSDate(): Date;
-    public toJSON(): TimeJsonData;
+    public toUnixTime(): number
+    public toJSDate(): Date
+    public toJSON(): TimeJsonData
   }
 
   export class Duration {
@@ -120,25 +122,25 @@ declare module 'ical.js' {
   export class RecurExpansion {
     public complete: boolean
 
-    public next(): Time;
+    public next(): Time
   }
 
   export class Timezone {
     public static utcTimezone: Timezone
     public static localTimezone: Timezone
-    public static convert_time(tt: Time, fromZone: Timezone, toZone: Timezone): Time;
+    public static convert_time(tt: Time, fromZone: Timezone, toZone: Timezone): Time
 
     public tzid: string
     public component: Component
 
     constructor(data: Component | {
-      component: string | Component;
-      tzid?: string;
-      location?: string;
-      tznames?: string;
-      latitude?: number;
-      longitude?: number;
-    });
+      component: string | Component
+      tzid?: string
+      location?: string
+      tznames?: string
+      latitude?: number
+      longitude?: number
+    })
   }
 
   export class TimezoneService {
@@ -148,7 +150,7 @@ declare module 'ical.js' {
     public static remove(tzid: string): Timezone | null
   }
 
-  export type FrequencyValues = 'YEARLY' | 'MONTHLY' | 'WEEKLY' | 'DAILY' | 'HOURLY' | 'MINUTELY' | 'SECONDLY';
+  export type FrequencyValues = 'YEARLY' | 'MONTHLY' | 'WEEKLY' | 'DAILY' | 'HOURLY' | 'MINUTELY' | 'SECONDLY'
 
   export enum WeekDay {
     SU = 1,
@@ -178,18 +180,18 @@ declare module 'ical.js' {
   }
 
   export class RecurIterator {
-    public next(): Time;
+    public next(): Time
   }
 
   export class Recur {
-    constructor(data?: RecurData);
+    constructor(data?: RecurData)
     public until: Time | null
     public freq: FrequencyValues
     public count: number | null
 
-    public clone(): Recur;
-    public toJSON(): Omit<RecurData, 'until'> & { until?: string };
-    public iterator(startTime?: Time): RecurIterator;
-    public isByCount(): boolean;
+    public clone(): Recur
+    public toJSON(): Omit<RecurData, 'until'> & { until?: string }
+    public iterator(startTime?: Time): RecurIterator
+    public isByCount(): boolean
   }
 }

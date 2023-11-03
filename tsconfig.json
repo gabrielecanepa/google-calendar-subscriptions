@@ -1,11 +1,11 @@
 {
-  "include": ["src/*.ts"],
+  "include": ["src", "test"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "build",
     "baseUrl": "src",
-    "types": ["node"],
+    "types": ["jest", "node"],
     "allowJs": false,
     "target": "es2020",
     "module": "commonjs",
