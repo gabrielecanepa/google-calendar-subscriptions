@@ -1,0 +1,48 @@
+name: Validate commits
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+          registry-url: https://registry.npmjs.org
+          cache: yarn
+      - name: Install dependencies
+        run: |
+          yarn --frozen-lockfile
+          yarn bin >> $GITHUB_PATH
+      - name: Validate commits
+        if: github.event_name == 'push' && github.event.sender.id == github.event.repository.owner.id
+        run: |
+          if [[ "${{ github.event.head_commit.message }}" =~ ^Bump\ package ]]; then
+            echo "::info ::skipping commitlint checks on package bump"
+            exit 0
+          fi
+          if [[ ${{ github.event.forced }} == true ]]; then
+            echo "::warning ::validating last commit only on force push"
+            commitlint --from HEAD~1 --to HEAD --verbose
+            exit $?
+          fi
+          if [[ ${{ github.event.before }} == 0000000000000000000000000000000000000000 ]]; then
+            echo "::warning ::validating last commit only as there are no previous commits on branch ${{ github.ref_name }}"
+            commitlint --from HEAD~1 --to HEAD --verbose
+            exit $?
+          fi
+          commitlint --from ${{ github.event.before }} --to ${{ github.event.after }} --verbose
+      - name: Validate PR commits
+        if: github.event_name == 'pull_request'
+        run: commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
+      - name: Run linters and tests
+        run: yarn lint:code && yarn test
+        env:
+          TEST_CLIENT_EMAIL: ${{ secrets.TEST_CLIENT_EMAIL }}
+          TEST_PRIVATE_KEY: ${{ secrets.TEST_PRIVATE_KEY }}
+          TEST_SUBSCRIPTIONS_URLS: ${{ secrets.TEST_SUBSCRIPTIONS_URLS }}
