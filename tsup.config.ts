@@ -1,6 +1,6 @@
-import { defineConfig, Options } from 'tsup'
+import { defineConfig } from 'tsup'
 
-const opts: Options = {
+export default defineConfig({
   entry: ['src/index.ts'],
   outDir: 'build',
   format: ['cjs', 'esm'],
@@ -9,6 +9,4 @@ const opts: Options = {
   sourcemap: true,
   minify: true,
   clean: true,
-}
-
-export default defineConfig(opts)
+})

@@ -1,3 +1,4 @@
+.husky/_/
 build/
 node_modules/
 *.cache
