@@ -12,10 +12,10 @@
     "calendar-subscriptions",
     "calendar-synchronization"
   ],
-  "homepage": "https://github.com/gabrielecanepa/google-calendar-subscriptions",
+  "homepage": "https://github.com/gabrielecanepa/google-calendar-subscriptions#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gabrielecanepa/google-calendar-subscriptions.git"
+    "url": "git+https://github.com/gabrielecanepa/google-calendar-subscriptions.git"
   },
   "bugs": {
     "url": "https://github.com/gabrielecanepa/google-calendar-subscriptions/issues"
@@ -25,22 +25,12 @@
   "main": "build/index.js",
   "module": "build/index.mjs",
   "types": "build/index.d.ts",
-  "files": [
-    "build"
-  ],
+  "files": ["build"],
   "exports": {
     ".": "./build/index.js"
   },
   "engines": {
     "node": ">=20"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
   },
   "release-it": {
     "git": {
@@ -78,6 +68,11 @@
       ],
       "after:release": "echo Successfully released ${name}@${version}."
     }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "scripts": {
     "build": "tsup --minify",
