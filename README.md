@@ -1,8 +1,8 @@
-![](.github/assets/banner.png)
+![](/.github/assets/banner.png)
 
 # Google Calendar Subscriptions
 
-Google Calendar Subscriptions is a npm module that extends the [Google Calendar client](https://github.com/googleapis/google-api-nodejs-client/tree/main/src/apis/calendar) with types and methods to define, manipulate and synchronize calendar subscriptions.
+Google Calendar Subscriptions is an npm module that extends the [Google Calendar client](https://github.com/googleapis/google-api-nodejs-client/tree/main/src/apis/calendar) with types and methods to define, manipulate and synchronize calendar subscriptions.
 
 ### Why? 🤔
 
@@ -143,7 +143,7 @@ Head over to your Google Cloud console, create a [new project](https://console.c
 
 Create a [new service account](https://console.cloud.google.com/iam-admin/serviceaccounts/create) and grant it owner permissions. Finally, select `Manage keys` and create a new JSON key:
 
-![](.github/assets/manage-keys.png)
+![](/.github/assets/manage-keys.png)
 
 A file will be downloaded to your computer. Use the `client_email` and `private_key` values to [authenticate to the client](#quickstart).
 

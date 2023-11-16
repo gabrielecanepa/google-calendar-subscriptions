@@ -1,4 +1,4 @@
-![](.github/assets/banner.png)
+![](/.github/assets/banner.png)
 
 # Google Calendar Subscriptions
 
@@ -143,7 +143,7 @@ Head over to your Google Cloud console, create a [new project](https://console.c
 
 Create a [new service account](https://console.cloud.google.com/iam-admin/serviceaccounts/create) and grant it owner permissions. Finally, select `Manage keys` and create a new JSON key:
 
-![](.github/assets/manage-keys.png)
+![](/.github/assets/manage-keys.png)
 
 A file will be downloaded to your computer. Use the `client_email` and `private_key` values to [authenticate to the client](#quickstart).
 
