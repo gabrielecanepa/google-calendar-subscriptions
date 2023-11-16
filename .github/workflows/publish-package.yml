@@ -3,6 +3,7 @@ name: Publish to GitHub Packages
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -11,15 +12,30 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-          registry-url: https://npm.pkg.github.com
-          cache: yarn
-      - run: yarn
-      - name: Publish package
-        run: yarn publish
+          cache: npm
+      - name: Update package.json
+        uses: jaywcjlove/github-action-package@main
+        with:
+          data: |
+            {
+              "name": "@${{ github.repository }}",
+              "publishConfig": {
+                "registry": "https://npm.pkg.github.com"
+              }
+            }
+      - name: Build .npmrc
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
+          echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" > .npmrc
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+      - name: Publish package
+        run: yarn publish
