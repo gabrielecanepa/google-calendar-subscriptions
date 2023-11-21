@@ -25,7 +25,9 @@
   "main": "build/index.js",
   "module": "build/index.mjs",
   "types": "build/index.d.ts",
-  "files": ["build"],
+  "files": [
+    "build"
+  ],
   "exports": {
     ".": "./build/index.js"
   },
@@ -85,6 +87,7 @@
   },
   "dependencies": {
     "@googleapis/calendar": "^9.3.2",
+    "googleapis-common": "^7.0.1",
     "ical.js": "^1.5.0"
   },
   "devDependencies": {
@@ -107,8 +110,5 @@
     "ts-node": "^10.9.1",
     "tsup": "^8.0.0",
     "typescript": "^5.2.2"
-  },
-  "peerDependencies": {
-    "googleapis-common": "^7.0.0"
   }
 }
