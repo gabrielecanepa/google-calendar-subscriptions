@@ -3206,7 +3206,7 @@ google-auth-library@^9.0.0:
     gtoken "^7.0.0"
     jws "^4.0.0"
 
-googleapis-common@^7.0.0:
+googleapis-common@^7.0.0, googleapis-common@^7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/googleapis-common/-/googleapis-common-7.0.1.tgz#c85d0ee605ff0be9f604b963c69dfd27e46f6dec"
   integrity sha512-mgt5zsd7zj5t5QXvDanjWguMdHAcJmmDrF9RkInCecNsyV7S7YtGqm5v2IWONNID88osb7zmx5FtrAP12JfD0w==
