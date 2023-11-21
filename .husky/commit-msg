@@ -4,7 +4,7 @@
 . "$(dirname "$0")/_/husky.sh"
 
 # Skip temporary commits (will run on push).
-[[ $(cat "$1") =~ [tmp]* || $(cat "$1") == tmp ]] && exit 0
+[[ $(cat "$1") =~ ^(# ?)?tmp* ]] && exit 0
 
 # Run commitlint.
 commitlint --edit "$1"

@@ -14,7 +14,7 @@
   "extends": ["plugin:@typescript-eslint/eslint-recommended", "plugin:@typescript-eslint/recommended"],
   "overrides": [
     {
-      "files": ["src/**/*.ts", "test/**/*.ts"],
+      "files": ["**/*.ts"],
       "rules": {
         "arrow-body-style": ["warn", "as-needed"],
         "array-bracket-spacing": ["error", "never"],
