@@ -29,13 +29,13 @@ jobs:
                 "registry": "https://npm.pkg.github.com"
               }
             }
-      - name: Build .npmrc
+      - name: Build npmrc
         run: |
           echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
-          echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" > .npmrc
+          echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" >> .npmrc
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        run: npm install --no-commit-hooks
       - name: Publish package
-        run: yarn publish
+        run: npm publish --no-commit-hooks
