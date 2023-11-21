@@ -71,11 +71,6 @@
       "after:release": "echo Successfully released ${name}@${version}."
     }
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
   "scripts": {
     "build": "tsup --minify",
     "prepare": "husky install",
