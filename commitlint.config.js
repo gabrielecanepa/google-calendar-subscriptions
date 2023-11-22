@@ -7,4 +7,4 @@ const config = {
   defaultIgnores: true,
 }
 
-export default config
+module.exports = config

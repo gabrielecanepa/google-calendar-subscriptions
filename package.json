@@ -80,7 +80,7 @@
     "lint:commits": "commitlint --from origin/main --to HEAD --verbose",
     "test": "jest",
     "ci": "yarn lint && yarn test",
-    "release": "dotenv release-it --",
+    "release": "dotenv release-it",
     "release:major": "yarn release --increment major --ci",
     "release:minor": "yarn release --increment minor --ci",
     "release:patch": "yarn release --increment patch --ci"

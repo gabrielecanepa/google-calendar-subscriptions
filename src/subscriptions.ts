@@ -1,7 +1,7 @@
 import { calendar_v3 } from '.'
 import { fetchCalendarDetails, fetchCalendarEvents, isSameEvent } from './utils'
 
-const MAX_CALENDAR_RESULTS = 2_500
+const MAX_CALENDAR_EVENTS = 2_500
 
 /**
  * Synchronizes a calendar subscription. 
@@ -14,7 +14,7 @@ const syncSubscription = async (
   const { requestBody: subscription, options } = params
   const { calendarId, fn, summary, url } = subscription as calendar_v3.Schema$Subscription
 
-  const res = await calendar.events.list({ calendarId, maxResults: MAX_CALENDAR_RESULTS }, ...opts as any)
+  const res = await calendar.events.list({ calendarId, maxResults: MAX_CALENDAR_EVENTS }, ...opts as any)
   const { items = [] } = res.data
 
   const events = await fetchCalendarEvents(url)
