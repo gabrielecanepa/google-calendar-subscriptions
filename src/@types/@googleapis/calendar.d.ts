@@ -61,7 +61,8 @@ declare module '@googleapis/calendar' {
       /**
        * Function to transform events before syncing the subscription.
        */
-      fn?: (events: calendar_v3.Schema$Event[]) => calendar_v3.Schema$Event[] | Promise<calendar_v3.Schema$Event[]>
+      fn?: (events: (calendar_v3.Schema$Event & { url?: string })[]) =>
+        calendar_v3.Schema$Event[] | Promise<calendar_v3.Schema$Event[]>
       /**
        * Identifier of the subscription.
        */
