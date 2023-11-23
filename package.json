@@ -39,7 +39,7 @@
     "git": {
       "commitMessage": "chore(release): v${version}",
       "tagAnnotation": "v${version}",
-      "push": false
+      "push": true
     },
     "github": {
       "release": true,
