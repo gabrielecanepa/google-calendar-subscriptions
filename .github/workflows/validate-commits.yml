@@ -17,16 +17,16 @@ jobs:
         with:
           node-version-file: .node-version
           registry-url: https://registry.npmjs.org
-          cache: yarn
+          cache: npm
       - name: Install dependencies
-        run: yarn --frozen-lockfile && yarn bin >> $GITHUB_PATH
+        run: npm install
       - name: Run commitlint
         if: github.actor != 'dependabot[bot]'
         run: commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
       - name: Run linters
-        run: yarn lint:code
+        run: npm run lint:code
       - name: Run tests
-        run: yarn test
+        run: npm run test
         env:
           TEST_CLIENT_EMAIL: ${{ secrets.TEST_CLIENT_EMAIL }}
           TEST_PRIVATE_KEY: ${{ secrets.TEST_PRIVATE_KEY }}

@@ -25,15 +25,14 @@
   "main": "build/index.js",
   "module": "build/index.mjs",
   "types": "build/index.d.ts",
-  "files": [
-    "build"
-  ],
+  "files": ["build"],
   "exports": {
     ".": "./build/index.js"
   },
   "engines": {
     "node": ">=20"
   },
+  "packageManager": "npm@10.2.4",
   "release-it": {
     "git": {
       "commitMessage": "chore(release): v${version}",
@@ -63,9 +62,9 @@
       }
     },
     "hooks": {
-      "after:init": "yarn ci",
+      "after:init": "npm run ci",
       "after:bump": [
-        "yarn build",
+        "npm run build",
         "mkdir -p versions/${version} && cp README.md $_ && git add $_"
       ],
       "after:release": "echo Successfully released ${name}@${version}."
@@ -74,16 +73,16 @@
   "scripts": {
     "build": "tsup --minify",
     "prepare": "husky install",
-    "lint": "yarn lint:code && yarn lint:commits",
+    "lint": "npm run lint:code && npm run lint:commits",
     "lint:code": "eslint . --ext .ts",
-    "lint:code:fix": "yarn lint:code --fix",
+    "lint:code:fix": "npm run lint:code --fix",
     "lint:commits": "commitlint --from origin/main --to HEAD --verbose",
     "test": "jest",
-    "ci": "yarn lint && yarn test",
+    "ci": "npm run lint && npm run test",
     "release": "dotenv release-it",
-    "release:major": "yarn release --increment major --ci",
-    "release:minor": "yarn release --increment minor --ci",
-    "release:patch": "yarn release --increment patch --ci"
+    "release:major": "npm run release --increment major --ci",
+    "release:minor": "npm run release --increment minor --ci",
+    "release:patch": "npm run release --increment patch --ci"
   },
   "dependencies": {
     "@googleapis/calendar": "^9.3.2",

@@ -4,4 +4,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 # Run CI checks.
-yarn ci
+npm run ci
