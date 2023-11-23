@@ -1,6 +1,18 @@
-![](/.github/assets/banner.png)
+<!-- BEGIN VARIABLES -->
+[banner]: https://github.com/gabrielecanepa/google-calendar-subscriptions/blob/main/.github/assets/banner.png?raw=true
+[manage-keys]: https://github.com/gabrielecanepa/google-calendar-subscriptions/blob/main/.github/assets/manage-keys.png?raw=true
+[npm-badge]: https://img.shields.io/npm/v/google-calendar-subscriptions?logo=npm&color=cb3837
+[github-badge]: https://img.shields.io/github/v/release/gabrielecanepa/google-calendar-subscriptions?logo=github&color=f5f5f5
+[ci-badge]: https://img.shields.io/github/actions/workflow/status/gabrielecanepa/google-calendar-subscriptions/validate-commits.yml?color=56aa56
+<!-- END VARIABLES -->
+
+![][banner]
 
 # Google Calendar Subscriptions
+
+[![][npm-badge]](https://npmjs.com/package/google-calendar-subscriptions)
+[![][github-badge]](https://github.com/gabrielecanepa/google-calendar-subscriptions/pkgs/npm/google-calendar-subscriptions)
+[![][ci-badge]](https://github.com/gabrielecanepa/google-calendar-subscriptions)
 
 Google Calendar Subscriptions is an npm module that extends the [Google Calendar client](https://github.com/googleapis/google-api-nodejs-client/tree/main/src/apis/calendar) with types and methods to define, manipulate and synchronize calendar subscriptions.
 
@@ -143,7 +155,7 @@ Head over to your Google Cloud console, create a [new project](https://console.c
 
 Create a [new service account](https://console.cloud.google.com/iam-admin/serviceaccounts/create) and grant it owner permissions. Finally, select `Manage keys` and create a new JSON key:
 
-![](/.github/assets/manage-keys.png)
+![][manage-keys]
 
 A file will be downloaded to your computer. Use the `client_email` and `private_key` values to [authenticate to the client](#quickstart).
 
