@@ -82,9 +82,9 @@
     "test": "jest",
     "ci": "npm run lint && npm run test",
     "release": "dotenv release-it",
-    "release:major": "npm run release --increment major --ci",
-    "release:minor": "npm run release --increment minor --ci",
-    "release:patch": "npm run release --increment patch --ci"
+    "release:major": "npm run release --increment major",
+    "release:minor": "npm run release --increment minor",
+    "release:patch": "npm run release --increment patch"
   },
   "dependencies": {
     "@googleapis/calendar": "^9.3.2",
