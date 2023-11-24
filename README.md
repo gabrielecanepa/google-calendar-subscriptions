@@ -4,6 +4,7 @@
 [npm-badge]: https://img.shields.io/npm/v/google-calendar-subscriptions?logo=npm&color=cb3837
 [github-badge]: https://img.shields.io/github/v/release/gabrielecanepa/google-calendar-subscriptions?logo=github&color=f5f5f5
 [ci-badge]: https://img.shields.io/github/actions/workflow/status/gabrielecanepa/google-calendar-subscriptions/validate-commits.yml?color=56aa56
+[types]: https://github.com/gabrielecanepa/google-calendar-subscriptions/blob/main/src/@types/@googleapis/calendar.d.ts
 <!-- END VARIABLES -->
 
 ![][banner]
@@ -24,7 +25,7 @@ Calendar subscriptions are a great tool, but:
 - The user does not own subscription calendars, which cannot be managed or shared
 - Synchronizations can't be controlled manually and happen at predefined intervals (usually 24 hours)
   
-In combination with CI tools like [GitHub Actions](#ci-and-github-actions), this module aims to solve these problems by providing a simple way to define, create and sync calendar subscriptions.
+In combination with CI tools like [GitHub Actions](#github-actions-octocat), this module aims to solve these problems by providing a simple way to define, create and sync calendar subscriptions.
 
 ## Installation
 
@@ -40,9 +41,7 @@ npm i google-calendar-subscriptions
 
 ## Usage
 
-### Quickstart
-
-Authenticate to the client using a service account, as described in the [Authentication section](#authentication).
+Authenticate to the client using a [service account](#authentication).
 
 ```js
 import { auth, calendar } from 'google-calendar-subscriptions'
@@ -59,20 +58,14 @@ const client = calendar({
 })
 ```
 
-Define a subscription following its [schema](#schemasubscription):
+Define a subscription following its [schema](#types):
 
 ```js
 const newSubscription = {
-  // Optional name that will be used to create the related calendar.
   summary: 'My Subscription',
-  // Optional ID.
   id: 'my-subscription',
-  // Email of the calendar owner.
-  // Without an owner, the calendar will be available only to the service account.
   owner: 'john.doe@gmail.com'
-  // URL of the calendar feed.
   subscriptionUrl: 'https://example.com/events.ics',
-  // Function to customize the events.
   fn: events => events.map(event => ({
     ...event,
     summary: event.summary.toUpperCase(),
@@ -80,13 +73,10 @@ const newSubscription = {
 }
 ```
 
-Create a calendar linked to the subscription using the [`insert` method](#calendarsubscriptionsinsertparams-paramsresourcesubscriptionsinsert-options-methodoptions--promiseschemasubscription):
+Create a calendar linked to the subscription using [`insert`](#calendarsubscriptionsinsertparams-options):
   
 ```js
-// Create a calendar and sync the specified subscription.
-const subscription = await client.subscriptions.insert({ 
-  requestBody: newSubscription 
-})
+const subscription = await client.subscriptions.insert({ requestBody: newSubscription })
 
 // The subscription will contain the ID of the newly created calendar.
 console.log(subscription)
@@ -99,22 +89,12 @@ console.log(subscription)
 //   summary: "My Subscription",
 //   url: "https://example.com/events.ics"
 // }
-
-// Retrieve the calendar events with the `events.list` method.
-const { data: { items } } = await calendar.events.list({ 
-  calendarId: subscription.calendarId 
-})
-
-// And check if the function was correctly applied.
-console.log(items.every(item => item.summary === item.summary.toUpperCase())) // => true
 ```
 
-You can now start syncing the subscription using the [`sync` method](#calendarsubscriptionssyncparams-paramsresourcesubscriptionssync-options-methodoptions--promisevoid):
+You can now start syncing the subscription using [`sync`](#calendarsubscriptionssyncparams-options):
 
 ```js
-await client.subscriptions.sync({ 
-  requestBody: subscription 
-})
+await client.subscriptions.sync({ requestBody: subscription })
 ```
 
 Subscription functions can be either synchronous or asynchronous:
@@ -124,27 +104,23 @@ const newAsyncSubscription = {
   subscriptionUrl: 'https://example.com/events.ics',
   fn: async events => {
     const { data } = await fetch(`https://example.com/resource`)
+    
     return events.map(event => {
-      // use the fetched data to modify your events...
+      // use fetched data to modify events...
     })
   },
 }
 
-const asyncSubscription = await client.subscriptions.create({ 
-  requestBody: newAsyncSubscription 
-})
+const asyncSubscription = await client.subscriptions.create({ requestBody: newAsyncSubscription })
 ```
 
 Multiple subscriptions can also be synced at once, and calendars can be cleared before syncing:
 
 ```js
 await client.subscriptions.sync({ 
-  requestBody: [
-    subscription, 
-    asyncSubscription
-  ],
+  requestBody: [subscription, asyncSubscription],
   options: { 
-    clear: true 
+    clear: true,
   }
 })
 ```
@@ -157,130 +133,41 @@ Create a [new service account](https://console.cloud.google.com/iam-admin/servic
 
 ![][manage-keys]
 
-A file will be downloaded to your computer. Use the `client_email` and `private_key` values to [authenticate to the client](#quickstart).
+A file will be downloaded to your computer. Use the `client_email` and `private_key` values to [authenticate to the client](#usage).
 
-### CI and GitHub Actions
+### CI 
 
-A GitHub Action to automatically sync subscriptions is currently under development and will be released soon!
+#### GitHub Actions :octocat:
+
+A GitHub Action to sync subscriptions programmatically is under development and will be released soon!
 
 ## API
 
-The following API extends and overrides values defined by the Google Calendar client. The original definitions can be found [here](https://github.com/googleapis/google-api-nodejs-client/blob/main/src/apis/calendar/v3.ts).
-
-### Client
-
-#### `auth: AuthPlus`
-
-[AuthPlus](https://cloud.google.com/nodejs/docs/reference/googleapis-common/latest/googleapis-common/authplus) object exported from the original client.
-
-#### `calendar(options: Options): Calendar`
-
-Function returning a Google Calendar client with subscription functionalities.
-
-#### `Calendar.subscriptions.insert(params?: Params$Resource$Subscriptions$Insert, options?: MethodOptions) => Promise<Schema$Subscription>`
-
-Method to create a calendar and sync the specified subscription.
-
-#### `Calendar.subscriptions.sync(params?: Params$Resource$Subscriptions$Sync, options?: MethodOptions) => Promise<void>`
-
-Method to synchronize the specified subscriptions.
-
-### Types
+The following API extends and overrides the [original definitions](https://github.com/googleapis/google-api-nodejs-client/blob/main/src/apis/calendar/v3.ts) of the Google Calendar client.
 
 #### `calendar_v3`
 
-Namespace of the Google Calendar client with additional subscription definitions (omitted in this API documentation).
+Namespace of the Google Calendar client with additional subscription definitions.
 
-#### `Calendar`
+#### `auth`
 
-Google Calendar client including an additional [subscriptions resource](#calendar_v3resourcesubscriptions).
+[AuthPlus](https://cloud.google.com/nodejs/docs/reference/googleapis-common/latest/googleapis-common/authplus) instance exported from the original client.
 
-#### `Schema$Subscription`
+#### `calendar(options)`
 
-Definition of a calendar subscription.
+Function returning a Calendar instance with subscription functionalities.
 
-```ts
-{
-  /**
-   * ID of the calendar hosting the subscription.
-   */
-  calendarId?: string
-  /**
-   * Description of the subscription.
-   */
-  description?: string
-  /**
-   * Function to transform events before syncing the subscription.
-   */
-  fn?: (events: calendar_v3.Schema$Event[]) => calendar_v3.Schema$Event[] | Promise<calendar_v3.Schema$Event[]>
-  /**
-   * Identifier of the subscription.
-   */
-  id?: string
-  /**
-   * Email of the user subscribed to the calendar. 
-   */
-  owner?: string
-  /**
-   * Title of the subscription.
-   */
-  summary?: string
-  /**
-   * URL of the calendar subscription.
-   */
-  url: string
-}
-```
+#### `Calendar.subscriptions.insert(params, options)`
 
-#### `Resource$Subscriptions`
+Function creating and syncing a new subscription.
 
-Subscriptions resource extending the original client.
+#### `Calendar.subscriptions.sync(params, options)`
 
-```ts
-{
-  /**
-   * Creates a calendar and syncs the specified subscriptions.
-   */
-  insert: (params?: Params$Resource$Subscriptions$Insert, options?: MethodOptions) => Promise<Schema$Subscription>
-  /**
-   * Syncs the specified subscription.
-   */
-  sync: (params?: Params$Resource$Subscriptions$Sync, options?: MethodOptions) => Promise<void>
-}
-```
+Function synchronizing the specified subscriptions.
 
-#### `Params$Resource$Subscriptions$Insert`
+### Types
 
-Parameters of the [`insert`](#calendarsubscriptionsinsertparams-paramsresourcesubscriptionsinsert-options-methodoptions--promiseschemasubscription) method.
-
-```ts
-{
-  /**
-   * Request body metadata.
-   */
-  requestBody?: Schema$Subscription
-}
-```
-
-#### `Params$Resource$Subscriptions$Sync`
-
-Parameters of the [`sync`](#calendarsubscriptionssyncparams-paramsresourcesubscriptionssync-options-methodoptions--promisevoid) method.
-
-
-```ts
-{
-  /**
-   * Request body metadata.
-   */
-  requestBody?: Schema$Subscription | Schema$Subscription[]
-  options?: {
-    /**
-     * Whether to clear the calendar before syncing the subscription.
-     */
-    clear?: boolean
-  }
-}
-```
+See [`calendar.d.ts`][types].
 
 ## Development
 
@@ -304,7 +191,7 @@ To run the tests, rename `.env.example` to `.env` and fill it with your credenti
 
 ## Releases
 
-See [`CHANGELOG.md`](CHANGELOG.md) and the [releases page](https://github.com/gabrielecanepa/google-calendar-subscriptions/releases).
+See [changelog](CHANGELOG.md) and [releases](https://github.com/gabrielecanepa/google-calendar-subscriptions/releases).
 
 ## License
 
