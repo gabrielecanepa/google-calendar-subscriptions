@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/gabrielecanepa/google-calendar-subscriptions/compare/1.1.1...1.2.0) (2023-11-26)
+
+
+### Features
+
+* export utilities to fetch calendar events and details ([444f447](https://github.com/gabrielecanepa/google-calendar-subscriptions/commit/444f44714c7043b3ab6a0a4638bb5d6757f509cb))
+
+
+### Bug Fixes
+
+* always return a `calendarId` on `subscriptions.insert` ([48fb767](https://github.com/gabrielecanepa/google-calendar-subscriptions/commit/48fb767489443651e5955710bf5f53c85838ce74))
+
 ## [1.1.1](https://github.com/gabrielecanepa/google-calendar-subscriptions/compare/1.1.0...1.1.1) (2023-11-23)
 
 ## [1.1.0](https://github.com/gabrielecanepa/google-calendar-subscriptions/compare/1.0.0...1.1.0) (2023-11-23)
