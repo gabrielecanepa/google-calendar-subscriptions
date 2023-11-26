@@ -78,52 +78,34 @@ export const insert = async (
   calendar: calendar_v3.Calendar,
   ...args: Parameters<calendar_v3.Calendar['subscriptions']['insert']>
 ): ReturnType<calendar_v3.Calendar['subscriptions']['insert']> => {
-  const [params, ...opts] = args
-  const {
-    description = null,
-    id = null,
-    fn = null,
-    owner = null,
-    url,
-    ...calendarParams
-  } = params.requestBody
+  const [{ requestBody }, ...opts] = args
+  const { description, summary } = await fetchCalendarDetails(requestBody.url)
 
-  const calendarDetails = await fetchCalendarDetails(url)
-
-  const calendarRequestBody = {
-    ...calendarParams,
-    summary: calendarParams.summary || calendarDetails.summary,
-    description: description || calendarDetails.description,
+  const subscription = {
+    description: requestBody.description || description || null,
+    email: requestBody.email || null,
+    fn: requestBody.fn || null,
+    id: requestBody.id || null,
+    owner: requestBody.owner || null,
+    summary: requestBody.summary || summary || null,
+    url: requestBody.url,
   }
 
-  const { data: newCalendar } = await calendar.calendars.insert(
-    { requestBody: calendarRequestBody },
-    ...opts as any,
-  )
+  const { data } = await calendar.calendars.insert({ requestBody: subscription }, ...opts)
 
-  if (owner) {
+  if (subscription.owner) {
     await calendar.acl.insert({
-      calendarId: newCalendar.id,
+      calendarId: data.id,
       requestBody: {
         role: 'owner',
-        scope: { type: 'user', value: owner },
+        scope: { type: 'user', value: subscription.owner },
       },
     })
   }
 
-  const subscriptionRequestBody = {
-    calendarId: newCalendar.id,
-    description: calendarRequestBody.description,
-    fn,
-    id,
-    owner,
-    summary: calendarRequestBody.summary,
-    url,
-  }
-
-  await syncSubscription(calendar, { requestBody: subscriptionRequestBody }, ...opts)
-
-  return subscriptionRequestBody
+  await syncSubscription(calendar, { requestBody: subscription }, ...opts)
+  
+  return subscription
 }
 
 export const sync = async (
