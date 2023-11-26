@@ -34,8 +34,9 @@ jobs:
         run: |
           echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
           echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" >> .npmrc
-      - run: pnpm install
-      - run: pnpm build
-      - run: pnpm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: pnpm install
+      - run: pnpm build
+      - name: Publish package
+        run: pnpm publish --no-git-checks
