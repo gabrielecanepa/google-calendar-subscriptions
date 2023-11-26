@@ -30,13 +30,19 @@ In combination with CI tools like [GitHub Actions](#github-actions-octocat), thi
 ## Installation
 
 ```sh
-yarn add google-calendar-subscriptions
+npm i google-calendar-subscriptions
 ```
 
 or
 
 ```sh
-npm i google-calendar-subscriptions
+pnpm i google-calendar-subscriptions
+```
+
+or
+
+```sh
+yarn add google-calendar-subscriptions
 ```
 
 ## Usage
@@ -182,6 +188,8 @@ gh repo clone gabrielecanepa/google-calendar-subscriptions
 Install the dependencies with your preferred package manager and activate the Husky hooks:
 
 ```sh
+pnpm i
+# or
 npm i
 # or
 yarn

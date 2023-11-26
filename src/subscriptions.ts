@@ -11,7 +11,7 @@ const syncSubscription = async (
   ...args: Parameters<calendar_v3.Calendar['subscriptions']['sync']>
 ): Promise<void> => {
   const [params, ...opts] = args
-  const { requestBody: subscription, options } = params
+  const { requestBody: subscription, options } = params as calendar_v3.Params$Resource$Subscriptions$Sync
   const { calendarId, fn, summary, url } = subscription as calendar_v3.Schema$Subscription
 
   const res = await calendar.events.list({ calendarId, maxResults: MAX_CALENDAR_EVENTS }, ...opts as any)
@@ -65,7 +65,7 @@ const syncSubscriptions = async (
   ...args: Parameters<calendar_v3.Calendar['subscriptions']['sync']>
 ): Promise<void> => {
   const [params, ...opts] = args
-  const { requestBody, options } = params
+  const { requestBody, options } = params as calendar_v3.Params$Resource$Subscriptions$Sync
   const subscriptions = requestBody as calendar_v3.Schema$Subscription[]
 
   for (const subscription of subscriptions) {
@@ -77,8 +77,9 @@ const syncSubscriptions = async (
 export const insert = async (
   calendar: calendar_v3.Calendar,
   ...args: Parameters<calendar_v3.Calendar['subscriptions']['insert']>
-): ReturnType<calendar_v3.Calendar['subscriptions']['insert']> => {
-  const [{ requestBody }, ...opts] = args
+): Promise<ReturnType<calendar_v3.Calendar['subscriptions']['insert']>> => {
+  const [params, ...opts] = args
+  const { requestBody } = params as calendar_v3.Params$Resource$Subscriptions$Insert
   const { description, summary } = await fetchCalendarDetails(requestBody.url)
 
   const subscription = {
@@ -113,9 +114,9 @@ export const insert = async (
 export const sync = async (
   calendar: calendar_v3.Calendar,
   ...args: Parameters<calendar_v3.Calendar['subscriptions']['sync']>
-): ReturnType<calendar_v3.Calendar['subscriptions']['sync']> => {
+): Promise<ReturnType<calendar_v3.Calendar['subscriptions']['sync']>> => {
   const [params, ...opts] = args
-  const { requestBody: subscription } = params
+  const { requestBody: subscription } = params as calendar_v3.Params$Resource$Subscriptions$Sync
 
   Array.isArray(subscription)
     ? syncSubscriptions(calendar, params, ...opts as any)
