@@ -82,6 +82,7 @@ export const insert = async (
   const { description, summary } = await fetchCalendarDetails(requestBody.url)
 
   const subscription = {
+    calendarId: null,
     description: requestBody.description || description || null,
     email: requestBody.email || null,
     fn: requestBody.fn || null,
@@ -92,10 +93,11 @@ export const insert = async (
   }
 
   const { data } = await calendar.calendars.insert({ requestBody: subscription }, ...opts)
+  subscription.calendarId = data.id
 
   if (subscription.owner) {
     await calendar.acl.insert({
-      calendarId: data.id,
+      calendarId: subscription.calendarId,
       requestBody: {
         role: 'owner',
         scope: { type: 'user', value: subscription.owner },
