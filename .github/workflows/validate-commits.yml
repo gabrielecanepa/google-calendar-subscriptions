@@ -8,25 +8,22 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
         with:
-          fetch-depth: 0
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+          version: 8
+      - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-          registry-url: https://registry.npmjs.org
-          cache: npm
-      - name: Install dependencies
-        run: npm install
+          cache: pnpm
+      - run: pnpm install
       - name: Run commitlint
         if: github.actor != 'dependabot[bot]'
         run: commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
       - name: Run linters
-        run: npm run lint:code
+        run: pnpm lint:code
       - name: Run tests
-        run: npm run test
+        run: pnpm test
         env:
           TEST_CLIENT_EMAIL: ${{ secrets.TEST_CLIENT_EMAIL }}
           TEST_PRIVATE_KEY: ${{ secrets.TEST_PRIVATE_KEY }}

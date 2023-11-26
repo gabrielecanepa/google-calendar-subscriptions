@@ -34,7 +34,6 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "npm@10.2.4",
   "release-it": {
     "git": {
       "commitMessage": "chore(release): v${version}",
@@ -64,27 +63,23 @@
       }
     },
     "hooks": {
-      "after:init": "npm run ci",
-      "after:bump": [
-        "npm run build",
-        "mkdir -p versions/${version} && cp README.md $_ && git add $_"
-      ],
+      "after:init": "pnpm lint && pnpm build",
+      "after:bump": "mkdir -p versions/${version} && cp README.md $_ && git add $_",
       "after:release": "echo Successfully released ${name}@${version}."
     }
   },
   "scripts": {
     "build": "tsup --minify",
     "prepare": "husky install",
-    "lint": "npm run lint:code && npm run lint:commits",
+    "lint": "pnpm lint:code && pnpm lint:commits",
     "lint:code": "eslint . --ext .ts",
-    "lint:code:fix": "npm run lint:code --fix",
+    "lint:code:fix": "pnpm lint:code --fix",
     "lint:commits": "commitlint --from origin/main --to HEAD --verbose",
     "test": "jest",
-    "ci": "npm run lint && npm run test",
     "release": "dotenv release-it",
-    "release:major": "npm run release --increment major",
-    "release:minor": "npm run release --increment minor",
-    "release:patch": "npm run release --increment patch"
+    "release:major": "pnpm release --increment major",
+    "release:minor": "pnpm release --increment minor",
+    "release:patch": "pnpm release --increment patch"
   },
   "dependencies": {
     "@googleapis/calendar": "^9.3.2",
