@@ -3,7 +3,7 @@ import { isValidSubscription, toArray } from '../src/utils'
 
 const CLIENT_EMAIL = process.env.TEST_CLIENT_EMAIL
 const PRIVATE_KEY = process.env.TEST_PRIVATE_KEY
-const SUBSCRIPTION_URLS = process.env.TEST_SUBSCRIPTIONS_URLS
+const SUBSCRIPTION_URLS = process.env.TEST_SUBSCRIPTION_URLS
 
 const FETCH_TIMEOUT = 60_000
 const SCOPES = ['https://www.googleapis.com/auth/calendar']

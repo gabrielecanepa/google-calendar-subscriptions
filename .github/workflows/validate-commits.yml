@@ -27,4 +27,4 @@ jobs:
         env:
           TEST_CLIENT_EMAIL: ${{ secrets.TEST_CLIENT_EMAIL }}
           TEST_PRIVATE_KEY: ${{ secrets.TEST_PRIVATE_KEY }}
-          TEST_SUBSCRIPTIONS_URLS: ${{ secrets.TEST_SUBSCRIPTIONS_URLS }}
+          TEST_SUBSCRIPTION_URLS: ${{ secrets.TEST_SUBSCRIPTION_URLS }}

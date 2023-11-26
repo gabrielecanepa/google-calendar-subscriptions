@@ -195,7 +195,7 @@ npm i
 yarn
 ```
 
-To run the tests, rename `.env.example` to `.env` and fill it with your credentials. Some sample calendars to be used as `TEST_SUBSCRIPTIONS_URLS` are available [here](https://gist.github.com/gabrielecanepa/5235760f3e2ab3fb7e8a68257d98ae6a).
+To run the tests, rename `.env.example` to `.env` and fill it with your credentials. Some sample calendars to be used as `TEST_SUBSCRIPTION_URLS` are available [here](https://gist.github.com/gabrielecanepa/5235760f3e2ab3fb7e8a68257d98ae6a).
 
 ## Releases
 
