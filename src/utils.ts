@@ -96,7 +96,7 @@ export const getDatesFromICalComponent = (component: ICalComponent, timeZone: st
   }, { start: { date: null }, end: { date: null } })
 
 /**
- * Format an iCal component as a Google Calendar resource.
+ * Formats an iCal component as a Google Calendar resource.
  *
  * @url https://developers.google.com/calendar/api/v3/reference/events#resource
  */
@@ -125,12 +125,12 @@ export const parseIcs = (ics: string): {
  */
 
 /**
- * Fetch an iCal from a url.
+ * Fetches an iCal from a url.
  */
 export const fetchIcs = async (url: string): Promise<string> => await (await fetch(url)).text()
 
 /**
- * Fetch and parse calendar events from a subscription url.
+ * Fetches and parses calendar events from a subscription url.
  */
 export const fetchCalendarEvents = async (subscriptionUrl: string): Promise<calendar_v3.Schema$Event[]> => {
   const ics = await fetchIcs(subscriptionUrl)
@@ -138,7 +138,7 @@ export const fetchCalendarEvents = async (subscriptionUrl: string): Promise<cale
 }
 
 /**
- * Fetch and parse calendar details from a calendar id.
+ * Fetches and parses calendar details from a calendar id.
  */
 export const fetchCalendarDetails = async (subscriptionUrl: string): Promise<calendar_v3.Schema$Calendar> => {
   const ics = await fetchIcs(subscriptionUrl)

@@ -49,20 +49,43 @@ declare module '@googleapis/calendar' {
       userIp?: string
     }
 
+    /**
+     * Definition of a calendar subscription.
+     */
     export interface Schema$Subscription {
       /**
-       * ID of the calendar hosting the subscription.
+       * ID of the Google Calendar calendar hosting the subscription.
+       * This field is omitted when using the `insert` method.
+       * 
+       * @example '*****************@group.calendar.google.com'
        */
       calendarId?: string
       /**
        * Description of the subscription.
+       * When using `insert`, it will become the description of the calendar.
        */
       description?: string
       /**
-       * Function to transform events before syncing the subscription.
+       * Email of the service account creating the subscription.
+       * 
+       * @example 'user@service-account.iam.gserviceaccount.com'
        */
-      fn?: (events: (calendar_v3.Schema$Event & { url?: string })[]) =>
-        calendar_v3.Schema$Event[] | Promise<calendar_v3.Schema$Event[]>
+      email?: string
+      /**
+       * Function to transform events before syncing the subscription.
+       * 
+       * @example
+       * 
+       * ```js
+       * function(events) {
+       *   return events.map(event => ({ 
+       *     ...event, 
+       *     summary: 'An alternate summary'
+       *   })
+       * }
+       * ```
+       */
+      fn?: (events: (calendar_v3.Schema$Event)[]) => calendar_v3.Schema$Event[] | Promise<calendar_v3.Schema$Event[]>
       /**
        * Identifier of the subscription.
        */
@@ -73,10 +96,13 @@ declare module '@googleapis/calendar' {
       owner?: string
       /**
        * Title of the subscription.
+       * When using `insert`, it will become the summary of the calendar.
        */
       summary?: string
       /**
-       * URL of the calendar subscription.
+       * URL of a calendar subscription.
+       * 
+       * @example 'https://example.com/calendar-subscription.ics'
        */
       url: string
     }
@@ -85,7 +111,7 @@ declare module '@googleapis/calendar' {
       /**
        * Request body metadata.
        */
-      requestBody?: Schema$Calendar & Schema$Subscription
+      requestBody?: Schema$Subscription
     }
     export interface Params$Resource$Subscriptions$Sync extends StandardParameters {
       /**
@@ -149,12 +175,12 @@ declare module '@googleapis/calendar' {
        *
        *   // Example response
        *   // {
-       *   //   "calendar_id": "calendar_id",
-       *   //   "fn": "subscription_function",
-       *   //   "id": "subscription_id",
-       *   //   "owner": "subscription_owner",
-       *   //   "summary": "subscription_summary",
-       *   //   "url": "subscription_url"
+       *   //   calendar_id: 'calendar_id',
+       *   //   fn: events => {...},
+       *   //   id: 'subscription_id',
+       *   //   owner: 'subscription_owner',
+       *   //   summary: 'subscription_summary',
+       *   //   url: 'subscription_url'
        *   // }
        * }
        *
