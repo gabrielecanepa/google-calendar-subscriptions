@@ -22,12 +22,11 @@
   },
   "author": "Gabriele Canepa <contact@gabrielecanepa.com>",
   "license": "MIT",
+  "type": "commonjs",
   "main": "build/index.js",
   "module": "build/index.mjs",
   "types": "build/index.d.ts",
-  "files": [
-    "build"
-  ],
+  "files": ["build"],
   "exports": {
     ".": "./build/index.js"
   },

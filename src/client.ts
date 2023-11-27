@@ -43,9 +43,9 @@ export function calendar<T = calendar_v3.Calendar>(this: GoogleConfigurable, ver
   const api = getAPI<T>('calendar', versionOrOptions as string | ServiceOptions, VERSIONS, this)
   return {
     ...api,
-    subscriptions: Object.keys(subscriptions).reduce((subscriptionsObj, fn) => ({
+    subscriptions: Object.keys(subscriptions).reduce((subscriptionsObj, fnName) => ({
       ...subscriptionsObj,
-      [fn]: (...args) => subscriptions[fn](api, ...args),
+      [fnName]: (...args) => subscriptions[fnName](api, ...args),
     }), {}),
   }
 }

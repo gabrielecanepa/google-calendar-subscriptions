@@ -1,5 +1,4 @@
 /// <reference types="node" />
-/* eslint-disable max-len, max-lines */
 
 import {
   APIRequestContext,
@@ -7,7 +6,7 @@ import {
   Compute,
   GoogleAuth,
   JWT,
-  MethodOptions,
+  MethodOptions as BaseMethodOptions,
   OAuth2Client,
   UserRefreshClient,
 } from 'googleapis-common'
@@ -28,7 +27,8 @@ declare module '@googleapis/calendar' {
        */
       fields?: string
       /**
-       * API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+       * API key. Your API key identifies your project and provides you with API access, quota, and reports. 
+       * Required unless you provide an OAuth 2.0 token.
        */
       key?: string
       /**
@@ -47,6 +47,10 @@ declare module '@googleapis/calendar' {
        * Deprecated. Please use quotaUser instead.
        */
       userIp?: string
+    }
+
+    interface MethodOptions extends BaseMethodOptions {
+      calendar: Calendar
     }
 
     /**
