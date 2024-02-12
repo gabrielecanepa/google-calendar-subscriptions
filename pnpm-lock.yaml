@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@googleapis/calendar':
     specifier: ^9.3.2
-    version: 9.5.1
+    version: 9.7.0
   googleapis-common:
     specifier: ^7.0.1
     version: 7.0.1
@@ -824,8 +824,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@googleapis/calendar@9.5.1:
-    resolution: {integrity: sha512-z3lVWiDijXIP8EnqXK2M+kQ5Rz+/NTBI7idAgjVkeZ4HhAbLQDKhTq1j4kll4smc6sEHH4g+HzYseyGycpHgTw==}
+  /@googleapis/calendar@9.7.0:
+    resolution: {integrity: sha512-sZe0YCihDfO14Y1Zg4Qqzof/w5Vqa08ujAfZioXmIsaAu4+zvVsL+BJ1Y6I5LY60ARG4Zf2chjP+tKP3UdPJFQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
       googleapis-common: 7.0.1
