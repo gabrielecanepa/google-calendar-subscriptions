@@ -83,7 +83,7 @@
   "dependencies": {
     "@googleapis/calendar": "^9.3.2",
     "googleapis-common": "^7.0.1",
-    "ical.js": "^1.5.0"
+    "ical.js": "^2.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.0.3",

@@ -12,8 +12,8 @@ dependencies:
     specifier: ^7.0.1
     version: 7.0.1
   ical.js:
-    specifier: ^1.5.0
-    version: 1.5.0
+    specifier: ^2.0.0
+    version: 2.0.0
 
 devDependencies:
   '@commitlint/cli':
@@ -3885,8 +3885,8 @@ packages:
     hasBin: true
     dev: true
 
-  /ical.js@1.5.0:
-    resolution: {integrity: sha512-7ZxMkogUkkaCx810yp0ZGKvq1ZpRgJeornPttpoxe6nYZ3NLesZe1wWMXDdwTkj/b5NtXT+Y16Aakph/ao98ZQ==}
+  /ical.js@2.0.0:
+    resolution: {integrity: sha512-eb/KPJlF1IxRNvbjkGtt3lXQg1TeGEh8RzmCQk65qIFw5p+SONy8FUCFoclsfxpX1CFjyShzO/Lm0bdig7vFPg==}
     dev: false
 
   /iconv-lite@0.4.24:
