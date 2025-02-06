@@ -35,40 +35,7 @@
   "engines": {
     "node": ">=20"
   },
-  "release-it": {
-    "git": {
-      "commitMessage": "chore(release): v${version}",
-      "tagAnnotation": "v${version}",
-      "push": true
-    },
-    "github": {
-      "release": true,
-      "releaseName": "v${version}",
-      "autoGenerate": true,
-      "comments": {
-        "submit": false,
-        "issue": "This issue has been resolved in v${version}. See [${releaseName}](${releaseUrl}) for release notes.",
-        "pr": "This pull request is included in v${version}. See [${releaseName}](${releaseUrl}) for release notes."
-      }
-    },
-    "npm": {
-      "publish": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": {
-          "name": "conventionalcommits"
-        },
-        "header": "# Changelog",
-        "infile": "CHANGELOG.md"
-      }
-    },
-    "hooks": {
-      "after:init": "pnpm lint && pnpm build",
-      "after:bump": "mkdir -p versions/${version} && cp README.md $_ && git add $_",
-      "after:release": "echo Successfully released ${name}@${version}."
-    }
-  },
+  "packageManager": "pnpm@9.15.4",
   "scripts": {
     "build": "tsup --minify",
     "prepare": "husky install",
@@ -107,5 +74,39 @@
     "ts-node": "^10.9.1",
     "tsup": "^8.0.0",
     "typescript": "^5.2.2"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore(release): v${version}",
+      "tagAnnotation": "v${version}",
+      "push": true
+    },
+    "github": {
+      "release": true,
+      "releaseName": "v${version}",
+      "autoGenerate": true,
+      "comments": {
+        "submit": false,
+        "issue": "This issue has been resolved in v${version}. See [${releaseName}](${releaseUrl}) for release notes.",
+        "pr": "This pull request is included in v${version}. See [${releaseName}](${releaseUrl}) for release notes."
+      }
+    },
+    "npm": {
+      "publish": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": {
+          "name": "conventionalcommits"
+        },
+        "header": "# Changelog",
+        "infile": "CHANGELOG.md"
+      }
+    },
+    "hooks": {
+      "after:init": "pnpm lint && pnpm build",
+      "after:bump": "mkdir -p versions/${version} && cp README.md $_ && git add $_",
+      "after:release": "echo Successfully released ${name}@${version}."
+    }
   }
 }
