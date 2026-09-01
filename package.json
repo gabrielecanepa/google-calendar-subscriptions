@@ -50,7 +50,7 @@
     "release:patch": "pnpm release --increment patch"
   },
   "dependencies": {
-    "@googleapis/calendar": "^9.3.2",
+    "@googleapis/calendar": "^16.0.0",
     "googleapis-common": "^7.0.1",
     "ical.js": "^2.0.0"
   },
